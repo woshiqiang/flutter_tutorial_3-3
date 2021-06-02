@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/movie_details.kt.dart';
+import 'package:flutter_tutorial_3/student_info.dart';
 import 'package:flutter_tutorial_3/student_list.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -61,7 +62,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: IconButton(
                 icon: Icon(Icons.search),
                 onPressed: (){
-                  print('search');
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) {
+                        return StudentInfo();
+                      }));
                 },
               ),
             ),
@@ -89,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Text(
                         'Attendance records',
-                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                        style: TextStyle(color: Colors.black),
                       )
                     ],
                   ),
@@ -115,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Text(
                         'Student score',
-                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                        style: TextStyle(color: Colors.black),
                       )
                     ],
                   ),
@@ -129,12 +133,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         Text(
                           'Student list ',
-                          style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                          style: TextStyle(color: Colors.black),
                         )
                       ],
                     ),
                     onTap: () {
-                      print("ddddd");
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return StudentListPage();
