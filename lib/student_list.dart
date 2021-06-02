@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'movie.dart';
 
-class StuentListPage extends StatefulWidget {
+class StudentListPage extends StatefulWidget {
   @override
-  _StuentListPageState createState() => _StuentListPageState();
+  _StudentListPageState createState() => _StudentListPageState();
 }
 
-class _StuentListPageState extends State<StuentListPage> {
+class _StudentListPageState extends State<StudentListPage> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
@@ -17,120 +17,96 @@ class _StuentListPageState extends State<StuentListPage> {
     return FutureBuilder(
       // Initialize FlutterFire:
       future: _initialization,
-      builder: (context, snapshot) //this functio is called every time the "future" updates
-      {
+      builder: (context,
+              snapshot) //this functio is called every time the "future" updates
+          {
         // Check for errors
         if (snapshot.hasError) {
-          return FullScreenText(text:"Something went wrong");
+          return FullScreenText(text: "Something went wrong");
         }
 
         // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done)
-        {
+        if (snapshot.connectionState == ConnectionState.done) {
           //BEGIN: the old MyApp builder from last week
           return ChangeNotifierProvider(
               create: (context) => MovieModel(),
-              child: MaterialApp(
-                  title: 'Student List',
-                  theme: ThemeData(
-                    primarySwatch: Colors.blue,
-                  ),
-                  home: MyHomePage(title: 'Student List')
-              )
-          );
+              child: Consumer<MovieModel>(builder: buildScaffold));
           //END: the old MyApp builder from last week
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
-        return FullScreenText(text:"Loading");
+        return FullScreenText(text: "Loading");
       },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget
-{
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-
-class _MyHomePageState extends State<MyHomePage>
-{
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<MovieModel>(
-        builder:buildScaffold
     );
   }
 
   Scaffold buildScaffold(BuildContext context, MovieModel movieModel, _) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Student List'),
+        leading: BackButton(
+          color: Colors.white,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
 
       //added this
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          showDialog(context: context, builder: (context) {
-            return MovieDetails();
-          });
+          showDialog(
+              context: context,
+              builder: (context) {
+                return MovieDetails();
+              });
         },
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-
             //YOUR UI HERE
-            if (movieModel.loading) CircularProgressIndicator() else
+            if (movieModel.loading)
+              CircularProgressIndicator()
+            else
               Expanded(
-
                 child: ListView.builder(
-
                     itemBuilder: (_, index) {
-
                       var movie = movieModel.items[index];
                       return Dismissible(
                         child: ListTile(
                           title: Text(movie.title),
-                          subtitle: Text(movie.year.toString() + " - " + movie
-                              .duration.toString() + " Minutes"),
-                          leading: movie.image != null ? Image.network(
-                              movie.image) : null,
-
+                          subtitle: Text(movie.year.toString() +
+                              " - " +
+                              movie.duration.toString() +
+                              " Minutes"),
+                          leading: movie.image != null
+                              ? Image.network(movie.image)
+                              : null,
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) {
-                                  return MovieDetails(id: movie.id);
-                                }));
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return MovieDetails(id: movie.id);
+                            }));
                           },
                         ),
-                        background:Container(
-                          color:Colors.green,
-                        ),key: UniqueKey(),
-                        onDismissed: (direction){
+                        background: Container(
+                          color: Colors.green,
+                        ),
+                        key: UniqueKey(),
+                        onDismissed: (direction) {
                           setState(() {
                             movieModel.delete(movie.id);
                           });
                         },
-
                       );
                     },
-                    itemCount: movieModel.items.length
-                ),
+                    itemCount: movieModel.items.length),
               )
           ],
         ),
       ),
     );
-
   }
 }
 
@@ -142,6 +118,8 @@ class FullScreenText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(textDirection:TextDirection.ltr, child: Column(children: [ Expanded(child: Center(child: Text(text))) ]));
+    return Directionality(
+        textDirection: TextDirection.ltr,
+        child: Column(children: [Expanded(child: Center(child: Text(text)))]));
   }
 }
