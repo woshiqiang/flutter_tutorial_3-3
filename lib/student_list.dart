@@ -6,10 +6,10 @@ import 'movie.dart';
 
 class StudentListPage extends StatefulWidget {
   @override
-  _StudentListPageState createState() => _StudentListPageState();
+  _StuentListPageState createState() => _StuentListPageState();
 }
 
-class _StudentListPageState extends State<StudentListPage> {
+class _StuentListPageState extends State<StudentListPage> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
@@ -30,7 +30,12 @@ class _StudentListPageState extends State<StudentListPage> {
           //BEGIN: the old MyApp builder from last week
           return ChangeNotifierProvider(
               create: (context) => MovieModel(),
-              child: Consumer<MovieModel>(builder: buildScaffold));
+              child: MaterialApp(
+                  title: 'Student List',
+                  theme: ThemeData(
+                    primarySwatch: Colors.blue,
+                  ),
+                  home: MyHomePage(title: 'Student List')));
           //END: the old MyApp builder from last week
         }
 
@@ -39,15 +44,33 @@ class _StudentListPageState extends State<StudentListPage> {
       },
     );
   }
+}
+
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<MovieModel>(builder: buildScaffold);
+  }
 
   Scaffold buildScaffold(BuildContext context, MovieModel movieModel, _) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Student List'),
-        leading: BackButton(
-          color: Colors.white,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        title: Text(widget.title),
+//        leading: BackButton(
+//          color: Colors.white,
+//          onPressed: () {
+////            Navigator.of(context,rootNavigator: true).pop();
+//          },
+//        ),
       ),
 
       //added this

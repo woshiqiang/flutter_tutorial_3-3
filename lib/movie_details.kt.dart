@@ -22,6 +22,7 @@ class _MovieDetailsState extends State<MovieDetails> {
   @override
   Widget build(BuildContext context)
   {
+    print('====================================');
     var movie = Provider.of<MovieModel>(context, listen:false).get(widget.id);
 
 
