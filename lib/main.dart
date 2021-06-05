@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/movie_details.kt.dart';
+import 'package:flutter_tutorial_3/student_add.dart';
 import 'package:flutter_tutorial_3/student_info.dart';
 import 'package:flutter_tutorial_3/student_list.dart';
 import 'package:provider/provider.dart';
@@ -19,16 +20,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: _initialization,
-      builder:  (context, snapshot) //this functio is called every time the "future" updates
-      {
+      builder: (context,
+              snapshot) //this functio is called every time the "future" updates
+          {
         // Check for errors
         if (snapshot.hasError) {
-          return FullScreenText(text:"Something went wrong");
+          return FullScreenText(text: "Something went wrong");
         }
 
         // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done)
-        {
+        if (snapshot.connectionState == ConnectionState.done) {
           //BEGIN: the old MyApp builder from last week
           return ChangeNotifierProvider(
               create: (context) => MovieModel(),
@@ -45,14 +46,12 @@ class MyApp extends StatelessWidget {
                       ),
                       body: MyHomePage(),
                     ),
-                  )
-              )
-          );
+                  )));
           //END: the old MyApp builder from last week
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
-        return FullScreenText(text:"Loading");
+        return FullScreenText(text: "Loading");
       },
     );
   }
@@ -72,7 +71,9 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             InkWell(
               onTap: () {
-                print('add');
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return StudentAddPage();
+                }));
               },
               child: Image.asset(
                 "assets/ic_person_add.png",
@@ -90,11 +91,10 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {},
               child: IconButton(
                 icon: Icon(Icons.search),
-                onPressed: (){
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                        return StudentInfo();
-                      }));
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return StudentInfo();
+                  }));
                 },
               ),
             ),
