@@ -26,6 +26,33 @@ class _MarkingPageState extends State<MarkingPage> {
       appBar: AppBar(
         title: Text('Marking'),
       ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            //YOUR UI HERE
+            if (model.loading)
+              CircularProgressIndicator()
+            else
+              Expanded(
+                child: ListView.builder(
+                    itemBuilder: (_, index) {
+                      var item = model.items[index];
+                      return Column(
+                        children: [
+                          Text(item.id),
+                          Text(item.sid),
+                          Text(item.name),
+                          Text(item.score.toString()),
+
+                        ],
+                      );
+                    },
+                    itemCount: model.items.length),
+              )
+          ],
+        ),
+      ),
     );
   }
 }

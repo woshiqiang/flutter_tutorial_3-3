@@ -7,7 +7,7 @@ class Tutorial {
   String id;
   String sid;
   String name;
-  List<int> score;
+  List<dynamic> score;
   List<int> scoreQ;
   Map<String, Object> qm = HashMap();
   Map<String, Object> sm = HashMap();
@@ -42,10 +42,27 @@ class TutorialModel extends ChangeNotifier {
   //added this
   bool loading = false;
 
+  TutorialModel() {
+    fetch();
+  }
+
+
   void add(Tutorial item) async {
     notifyListeners();
 
     await tutorialsCollection.add(item.toJson());
+
+    await fetch();
+  }
+
+  void delete(String id) async {
+    loading = true;
+    notifyListeners();
+
+    await tutorialsCollection.doc(id).delete();
+
+    //refresh the db
+    await fetch();
   }
 
   Tutorial get(String id) {

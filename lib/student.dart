@@ -7,7 +7,6 @@ class Student {
   String name;
   String email;
   String course;
-  List<dynamic> records = [];
 
   Student({this.sid, this.name, this.email, this.course});
 
@@ -16,17 +15,10 @@ class Student {
         sid = json['sid'],
         name = json['name'],
         email = json['email'],
-        course = json['course'],
-        records = json['records'];
+        course = json['course'];
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'sid': sid,
-        'name': name,
-        'email': email,
-        'course': course,
-        'records': records
-      };
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'sid': sid, 'name': name, 'email': email, 'course': course};
 }
 
 class StudentModel extends ChangeNotifier {

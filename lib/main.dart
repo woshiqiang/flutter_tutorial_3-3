@@ -11,7 +11,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
-//  runApp(StudentListPage());
 }
 
 class MyApp extends StatelessWidget {

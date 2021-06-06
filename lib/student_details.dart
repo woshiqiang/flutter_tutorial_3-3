@@ -83,7 +83,7 @@ class _StudentDetailsState extends State<StudentDetails> {
                               if (adding) {
                                 Provider.of<StudentModel>(
                                     context, listen: false).add(student);
-                                var tutorial = Tutorial(sid: student.sid,name: student.name);
+                                var tutorial = Tutorial(id: student.sid,sid: student.sid,name: student.name);
                                 tutorial.scoreQ = [0,0,0,0,0,0,0,0,0,0,0,0];
                                 tutorial.score = [0,0,0,0,0,0,0,0,0,0,0,0];
                                 var tutorialModel = TutorialModel();
