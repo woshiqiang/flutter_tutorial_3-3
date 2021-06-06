@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial_3/marking_page.dart';
 import 'package:flutter_tutorial_3/student.dart';
 import 'package:flutter_tutorial_3/student_details.dart';
 import 'package:flutter_tutorial_3/student_info.dart';
 import 'package:flutter_tutorial_3/student_list.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,6 +64,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Widget _a = Column(
@@ -84,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 decoration: InputDecoration(
                   hintText: 'Tap ID/Name(student infor/Score)',
                 ),
+                controller: searchController,
               ),
             ),
             InkWell(
@@ -91,9 +96,24 @@ class _MyHomePageState extends State<MyHomePage> {
               child: IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return StudentInfo();
-                  }));
+                  //search
+                  var key = searchController.text;
+                  if (key.isEmpty) {
+                    return;
+                  }
+
+                  var studentModel =
+                      Provider.of<StudentModel>(context, listen: false);
+                  studentModel.search(key).then((student) {
+                    if (student.id == null) {
+                      Fluttertoast.showToast(msg: 'Not find');
+                      return;
+                    }
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return StudentInfo();
+                    }));
+                  });
                 },
               ),
             ),
@@ -104,15 +124,12 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Container(
               color: Colors.white,
               child: GridView.count(
-                //列数
                 crossAxisCount: 2,
-                //水平间距
                 crossAxisSpacing: 4.0,
-                //垂直间距
                 mainAxisSpacing: 10.0,
                 padding: EdgeInsets.all(4.0),
                 children: <Widget>[
-                  Column(
+                 /* Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
@@ -124,20 +141,29 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: TextStyle(color: Colors.black),
                       )
                     ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/tutorial_work_foreground.png",
-                        fit: BoxFit.cover,
-                      ),
-                      Text(
-                        'Tutorial work',
-                        style: TextStyle(color: Colors.black),
-                      )
-                    ],
-                  ),
+                  ),*/
+                 InkWell(
+                   child: Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                       Image.asset(
+                         "assets/tutorial_work_foreground.png",
+                         fit: BoxFit.cover,
+                       ),
+                       Text(
+                         'Marking',
+                         style: TextStyle(color: Colors.black),
+                       )
+                     ],
+                   ),
+                   onTap: (){
+                     Navigator.push(context,
+                         MaterialPageRoute(builder: (context) {
+                           return MarkingPage();
+                         }));
+                   },
+                 )
+                  ,
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

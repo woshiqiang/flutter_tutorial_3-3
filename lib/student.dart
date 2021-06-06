@@ -3,19 +3,30 @@ import 'package:flutter/material.dart';
 
 class Student {
   String id;
+  String sid;
   String name;
   String email;
   String course;
+  List<dynamic> records = [];
 
-  Student({this.name, this.email, this.course});
+  Student({this.sid, this.name, this.email, this.course});
 
   Student.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
+      : id = json['id'],
+        sid = json['sid'],
+        name = json['name'],
         email = json['email'],
-        course = json['course'];
+        course = json['course'],
+        records = json['records'];
 
-  Map<String, dynamic> toJson() =>
-      {'name': name, 'email': email, 'course': course};
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'sid': sid,
+        'name': name,
+        'email': email,
+        'course': course,
+        'records': records
+      };
 }
 
 class StudentModel extends ChangeNotifier {
@@ -64,6 +75,21 @@ class StudentModel extends ChangeNotifier {
     await fetch();
   }
 
+  Future<Student> search(String key) async {
+    //get all students
+    var querySnapshot = await studentsCollection.orderBy("name").get();
+    Student student = Student();
+    //iterate over the students and add them to the list
+    for (var i = 0; i < querySnapshot.docs.length; i++) {
+      var s = Student.fromJson(querySnapshot.docs[i].data());
+      if (s.sid.contains(key) || s.name.contains(key)) {
+        student = s;
+        break;
+      }
+    }
+    return student;
+  }
+
   //replaced this
   StudentModel() {
     fetch();
@@ -77,10 +103,10 @@ class StudentModel extends ChangeNotifier {
     loading = true;
     notifyListeners(); //tell children to redraw, and they will see that the loading indicator is on
 
-    //get all movies
+    //get all students
     var querySnapshot = await studentsCollection.orderBy("name").get();
 
-    //iterate over the movies and add them to the list
+    //iterate over the students and add them to the list
     querySnapshot.docs.forEach((doc) {
       //note not using the add(Movie item) function, because we don't want to add them to the db
       var student = Student.fromJson(doc.data());
@@ -90,7 +116,7 @@ class StudentModel extends ChangeNotifier {
 
     //put this line in to artificially increase the load time, so we can see the loading indicator (when we add it in a few steps time)
     //comment this out when the delay becomes annoying
-    await Future.delayed(Duration(seconds: 1));
+//    await Future.delayed(Duration(seconds: 1));
 
     //we're done, no longer loading
     loading = false;

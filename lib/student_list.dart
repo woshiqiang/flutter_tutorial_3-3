@@ -30,12 +30,8 @@ class _StudentListPageState extends State<StudentListPage> {
           //BEGIN: the old MyApp builder from last week
           return ChangeNotifierProvider(
               create: (context) => StudentModel(),
-              child: MaterialApp(
-                  title: 'Student List',
-                  theme: ThemeData(
-                    primarySwatch: Colors.blue,
-                  ),
-                  home: MyHomePage(title: 'Student List')));
+              child:Consumer<StudentModel>(builder: buildScaffold),
+          );
           //END: the old MyApp builder from last week
         }
 
@@ -44,33 +40,10 @@ class _StudentListPageState extends State<StudentListPage> {
       },
     );
   }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<StudentModel>(builder: buildScaffold);
-  }
-
   Scaffold buildScaffold(BuildContext context, StudentModel studentModel, _) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
-       /* leading: BackButton(
-          color: Colors.white,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),*/
+        title: Text('Student list'),
       ),
 
       //added this
@@ -105,8 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return StudentDetails(id: student.id);
-                            }));
+                                  return StudentDetails(student: student);
+                                }));
                           },
                         ),
                         background: Container(
@@ -128,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
 
 //A little helper widget to avoid runtime errors -- we can't just display a Text() by itself if not inside a MaterialApp, so this workaround does the job
 class FullScreenText extends StatelessWidget {
