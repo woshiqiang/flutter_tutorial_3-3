@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial_3/student.dart';
+import 'package:flutter_tutorial_3/student_score.dart';
 
 class StudentInfo extends StatefulWidget {
+  final Student student;
+  const StudentInfo({Key key, this.student}) : super(key: key);
+
   @override
   _StudentInfoState createState() => _StudentInfoState();
 }
@@ -62,6 +67,22 @@ class _StudentInfoState extends State<StudentInfo> {
               children: [
                 Text('Course:'),
                 Text(''),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(child: Text('student score'),onPressed: (){
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) {
+                        return StudentScorePage(student: widget.student,);
+                      }));
+                },),
+                SizedBox(width: 40,),
+                ElevatedButton(child: Text('remove'),onPressed: (){},),
               ],
             ),
           ],

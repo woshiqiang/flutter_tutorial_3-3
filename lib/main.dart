@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/marking_page.dart';
+import 'package:flutter_tutorial_3/score_page.dart';
 import 'package:flutter_tutorial_3/student.dart';
 import 'package:flutter_tutorial_3/student_details.dart';
 import 'package:flutter_tutorial_3/student_info.dart';
@@ -110,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     }
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return StudentInfo();
+                      return StudentInfo(student: student,);
                     }));
                   });
                 },
@@ -161,20 +162,27 @@ class _MyHomePageState extends State<MyHomePage> {
                            return MarkingPage();
                          }));
                    },
-                 )
-                  ,
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/student_score_foreground.png",
-                        fit: BoxFit.cover,
-                      ),
-                      Text(
-                        'Student score',
-                        style: TextStyle(color: Colors.black),
-                      )
-                    ],
+                 ),
+                  InkWell(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/student_score_foreground.png",
+                          fit: BoxFit.cover,
+                        ),
+                        Text(
+                          'Student score',
+                          style: TextStyle(color: Colors.black),
+                        )
+                      ],
+                    ),
+                    onTap: (){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return ScorePage();
+                          }));
+                    },
                   ),
                   InkWell(
                     child: Column(
