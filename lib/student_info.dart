@@ -36,7 +36,7 @@ class _StudentInfoState extends State<StudentInfo> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Name:'),
-                Text('tom'),
+                Text(widget.student.name),
               ],
             ),
             SizedBox(
@@ -45,8 +45,8 @@ class _StudentInfoState extends State<StudentInfo> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('ID:'),
-                Text('tom'),
+                Text('SID:'),
+                Text(widget.student.sid),
               ],
             ),
             SizedBox(
@@ -56,7 +56,7 @@ class _StudentInfoState extends State<StudentInfo> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Email:'),
-                Text(''),
+                Text(widget.student.email),
               ],
             ),
             SizedBox(
@@ -66,7 +66,7 @@ class _StudentInfoState extends State<StudentInfo> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Course:'),
-                Text(''),
+                Text(widget.student.course),
               ],
             ),
             SizedBox(
