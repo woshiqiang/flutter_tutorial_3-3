@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial_3/movie_details.kt.dart';
+import 'package:flutter_tutorial_3/student.dart';
+import 'package:flutter_tutorial_3/student_details.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'movie.dart';
 
 class StudentListPage extends StatefulWidget {
   @override
-  _StuentListPageState createState() => _StuentListPageState();
+  _StudentListPageState createState() => _StudentListPageState();
 }
 
-class _StuentListPageState extends State<StudentListPage> {
+class _StudentListPageState extends State<StudentListPage> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
@@ -29,7 +29,7 @@ class _StuentListPageState extends State<StudentListPage> {
         if (snapshot.connectionState == ConnectionState.done) {
           //BEGIN: the old MyApp builder from last week
           return ChangeNotifierProvider(
-              create: (context) => MovieModel(),
+              create: (context) => StudentModel(),
               child: MaterialApp(
                   title: 'Student List',
                   theme: ThemeData(
@@ -58,30 +58,29 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<MovieModel>(builder: buildScaffold);
+    return Consumer<StudentModel>(builder: buildScaffold);
   }
 
-  Scaffold buildScaffold(BuildContext context, MovieModel movieModel, _) {
+  Scaffold buildScaffold(BuildContext context, StudentModel studentModel, _) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-//        leading: BackButton(
-//          color: Colors.white,
-//          onPressed: () {
-////            Navigator.of(context,rootNavigator: true).pop();
-//          },
-//        ),
+       /* leading: BackButton(
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),*/
       ),
 
       //added this
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return MovieDetails();
-              });
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) {
+                return StudentDetails();
+              }));
         },
       ),
       body: Center(
@@ -89,27 +88,24 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             //YOUR UI HERE
-            if (movieModel.loading)
+            if (studentModel.loading)
               CircularProgressIndicator()
             else
               Expanded(
                 child: ListView.builder(
                     itemBuilder: (_, index) {
-                      var movie = movieModel.items[index];
+                      var student = studentModel.items[index];
                       return Dismissible(
                         child: ListTile(
-                          title: Text(movie.title),
-                          subtitle: Text(movie.year.toString() +
-                              " - " +
-                              movie.duration.toString() +
-                              " Minutes"),
-                          leading: movie.image != null
-                              ? Image.network(movie.image)
-                              : null,
+                          title: Text(student.name),
+                          subtitle: Text(
+                            student.email + " - " + student.course.toString(),
+                          ),
+                          leading: null,
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return MovieDetails(id: movie.id);
+                              return StudentDetails(id: student.id);
                             }));
                           },
                         ),
@@ -119,12 +115,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         key: UniqueKey(),
                         onDismissed: (direction) {
                           setState(() {
-                            movieModel.delete(movie.id);
+                            studentModel.delete(student.id);
                           });
                         },
                       );
                     },
-                    itemCount: movieModel.items.length),
+                    itemCount: studentModel.items.length),
               )
           ],
         ),

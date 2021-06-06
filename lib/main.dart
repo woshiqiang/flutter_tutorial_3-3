@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial_3/movie_details.kt.dart';
-import 'package:flutter_tutorial_3/student_add.dart';
+import 'package:flutter_tutorial_3/student.dart';
+import 'package:flutter_tutorial_3/student_details.dart';
 import 'package:flutter_tutorial_3/student_info.dart';
 import 'package:flutter_tutorial_3/student_list.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'movie.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           //BEGIN: the old MyApp builder from last week
           return ChangeNotifierProvider(
-              create: (context) => MovieModel(),
+              create: (context) => StudentModel(),
               child: MaterialApp(
                   title: 'Student List',
                   theme: ThemeData(
@@ -72,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
             InkWell(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return StudentAddPage();
+                  return StudentDetails();
                 }));
               },
               child: Image.asset(
