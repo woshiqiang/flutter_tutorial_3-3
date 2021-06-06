@@ -71,6 +71,11 @@ class _StudentDetailsState extends State<StudentDetails> {
                               {
                                 student = Student();
                                 student.id = sidController.text;
+                                student.records = [];
+                                student.score = [0,0,0,0,0,0,0,0,0,0,0,0];
+                                student.scoreQ = [0,0,0,0,0,0,0,0,0,0,0,0];
+                                student.qm = {};
+                                student.sm = {};
                               }
 
                               //update the student object
@@ -83,11 +88,11 @@ class _StudentDetailsState extends State<StudentDetails> {
                               if (adding) {
                                 Provider.of<StudentModel>(
                                     context, listen: false).add(student);
-                                var tutorial = Tutorial(id: student.sid,sid: student.sid,name: student.name);
-                                tutorial.scoreQ = [0,0,0,0,0,0,0,0,0,0,0,0];
-                                tutorial.score = [0,0,0,0,0,0,0,0,0,0,0,0];
-                                var tutorialModel = TutorialModel();
-                                tutorialModel.add(tutorial);
+//                                var tutorial = Tutorial(id: student.sid,sid: student.sid,name: student.name);
+//                                tutorial.scoreQ = [0,0,0,0,0,0,0,0,0,0,0,0];
+//                                tutorial.score = [0,0,0,0,0,0,0,0,0,0,0,0];
+//                                var tutorialModel = TutorialModel();
+//                                tutorialModel.add(tutorial);
                               }else
                                 Provider.of<StudentModel>(context, listen:false).update(student.id, student);
 

@@ -7,18 +7,46 @@ class Student {
   String name;
   String email;
   String course;
+  List<dynamic> records;
+  List<dynamic> score;
+  List<dynamic> scoreQ;
+  Map<String, dynamic> qm = Map();
+  Map<String, dynamic> sm = Map();
 
-  Student({this.sid, this.name, this.email, this.course});
+  Student(
+      {this.sid,
+      this.name,
+      this.email,
+      this.course,
+      this.score,
+      this.scoreQ,
+      this.qm,
+      this.sm});
 
   Student.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         sid = json['sid'],
         name = json['name'],
         email = json['email'],
-        course = json['course'];
+        course = json['course'],
+        records = json['records'],
+        score = json['score'],
+        scoreQ = json['scoreQ'],
+        qm = json['qm'],
+        sm = json['sm'];
 
-  Map<String, dynamic> toJson() =>
-      {'id': id, 'sid': sid, 'name': name, 'email': email, 'course': course};
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'sid': sid,
+        'name': name,
+        'email': email,
+        'course': course,
+        'records': records,
+        'score': score,
+        'scoreQ': scoreQ,
+        'qm': qm,
+        'sm': sm
+      };
 }
 
 class StudentModel extends ChangeNotifier {
