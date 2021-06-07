@@ -5,6 +5,7 @@ import 'package:flutter_tutorial_3/student_score.dart';
 
 class StudentInfo extends StatefulWidget {
   final Student student;
+
   const StudentInfo({Key key, this.student}) : super(key: key);
 
   @override
@@ -28,9 +29,47 @@ class _StudentInfoState extends State<StudentInfo> {
                 color: Colors.blue,
               ),
             ),
-            Image.asset(
-              "assets/avatar_foreground.png",
-              fit: BoxFit.cover,
+            InkWell(
+              child: Image.asset(
+                "assets/avatar_foreground.png",
+                fit: BoxFit.cover,
+              ),
+              onTap: () {
+                showDialog<Null>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SimpleDialog(
+                      title: Text('SELECT HEAD'),
+                      children: <Widget>[
+                        SimpleDialogOption(
+                          child: ElevatedButton(
+                            child: Text('TAKE PICTURE'),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        SimpleDialogOption(
+                          child: ElevatedButton(
+                            child: Text('GALLERY'),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        SimpleDialogOption(
+                          child: ElevatedButton(
+                            child: Text('CANCEL'),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -75,14 +114,24 @@ class _StudentInfoState extends State<StudentInfo> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(child: Text('student score'),onPressed: (){
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                        return StudentScorePage(student: widget.student,);
-                      }));
-                },),
-                SizedBox(width: 40,),
-                ElevatedButton(child: Text('remove'),onPressed: (){},),
+                ElevatedButton(
+                  child: Text('student score'),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return StudentScorePage(
+                        student: widget.student,
+                      );
+                    }));
+                  },
+                ),
+                SizedBox(
+                  width: 40,
+                ),
+                ElevatedButton(
+                  child: Text('remove'),
+                  onPressed: () {},
+                ),
               ],
             ),
           ],
