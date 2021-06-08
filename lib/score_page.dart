@@ -51,7 +51,7 @@ class _ScorePageState extends State<ScorePage> {
                         SizedBox(width: 5),
                         Expanded(flex: 1, child: Text(item.sid)),
                         Expanded(flex: 1, child: Text(item.name)),
-                        Expanded(flex: 1, child: Text('0')),
+                        Expanded(flex: 1, child: Text(total(item))),
                       ],
                     );
                   },
@@ -61,5 +61,25 @@ class _ScorePageState extends State<ScorePage> {
         ),
       ),
     );
+  }
+
+  String total(Student student) {
+    int sumAttendance = 0;
+    int sumScore = 0;
+    int sumScoreQ = 0;
+
+    var records = student.records;
+    var score = student.score;
+    var scoreQ = student.scoreQ;
+
+    for (int i = 0; i < 12; i++) {
+      var week = 'week${i + 1}';
+      int attendance = records.contains(week) ? 100 : 0;
+      sumAttendance += attendance;
+      sumScore += score[i];
+      sumScoreQ += scoreQ[i];
+    }
+    int total = (sumAttendance ~/ 12 + sumScore ~/ 5 + sumScoreQ ~/ 5) ~/ 3;
+    return '${total}';
   }
 }

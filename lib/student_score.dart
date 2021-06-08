@@ -12,7 +12,51 @@ class StudentScorePage extends StatefulWidget {
 
 class _StudentScorePageState extends State<StudentScorePage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    List list = [];
+    list.add({
+      "Week": "Week",
+      "Attendance": "attendance",
+      "Quiz": "Quiz",
+      "Self work": "Self work"
+    });
+    var records = widget.student.records;
+    var score = widget.student.score;
+    var scoreQ = widget.student.scoreQ;
+    int sumAttendance = 0;
+    int sumScore = 0;
+    int sumScoreQ = 0;
+
+    for (int i = 0; i < 12; i++) {
+      var week = 'week${i + 1}';
+      int attendance = records.contains(week) ? 100 : 0;
+      sumAttendance += attendance;
+      sumScore += score[i];
+      sumScoreQ += scoreQ[i];
+
+      Map map = {
+        "Week": week,
+        "Attendance": attendance.toString(),
+        "Quiz": score[i].toString(),
+        "Self work": scoreQ[i].toString()
+      };
+      list.add(map);
+    }
+
+    list.add({
+      "Week": "Total mark",
+      "Attendance": "${sumAttendance ~/ 12}",
+      "Quiz": "${sumScore ~/ 5}",
+      "Self work": "${sumScoreQ ~/ 5}"
+    });
+
+    int total = (sumAttendance ~/ 12 + sumScore ~/ 5 + sumScoreQ ~/ 5) ~/ 3;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('student score'),
@@ -21,51 +65,46 @@ class _StudentScorePageState extends State<StudentScorePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(width: 5),
-                Expanded(flex: 2, child: Text('Week')),
-                Expanded(flex: 2, child: Text('attendance')),
-                Expanded(flex: 2, child: Text('Quiz')),
-                Expanded(flex: 2, child: Text('Self work')),
-              ],
-            ),
-            //YOUR UI HERE
             Expanded(
               child: ListView.builder(
                   itemBuilder: (_, index) {
-                    var i = index + 1;
-                    var week = 'week$i';
-                    var item = widget.student;
-                    var score = item.score;
-                    var scoreQ = item.scoreQ;
-                    var records = item.records;
-                    var a = records.contains(week) ? '100' : '0';
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(width: 5),
-                        Expanded(flex: 1, child: Text(week)),
-                        Expanded(flex: 1, child: Text(a)),
-                        Expanded(flex: 1, child: Text(score[index]?.toString())),
-                        Expanded(flex: 1, child: Text(scoreQ[index]?.toString())),
+                        Expanded(flex: 1, child: Text(list[index]['Week'])),
+                        Expanded(
+                            flex: 1, child: Text(list[index]['Attendance'])),
+                        Expanded(flex: 1, child: Text(list[index]['Quiz'])),
+                        Expanded(
+                            flex: 1, child: Text(list[index]['Self work'])),
                       ],
                     );
                   },
-                  itemCount: 12),
+                  itemCount: list.length),
             ),
-            Expanded(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(width: 5),
-                Expanded(flex: 2, child: Text('Week')),
-                Expanded(flex: 2, child: Text('attendance')),
-                Expanded(flex: 2, child: Text('Quiz')),
-                Expanded(flex: 2, child: Text('Self work')),
-              ],
-            )),
+            InkWell(
+              onTap: (){
+
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/share_foreground.png",
+                    fit: BoxFit.cover,
+                    width: 60,
+                  ),
+                  Text(
+                    'student grade is：$total',
+                    style: TextStyle(fontSize: 30),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),
