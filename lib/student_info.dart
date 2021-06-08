@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/student.dart';
 import 'package:flutter_tutorial_3/student_score.dart';
 
+import 'camera_page.dart';
+
 class StudentInfo extends StatefulWidget {
   final Student student;
 
@@ -47,6 +49,11 @@ class _StudentInfoState extends State<StudentInfo> {
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                                  return CameraPage();
+                                }));
+
                           },
                         ),
                         SimpleDialogOption(

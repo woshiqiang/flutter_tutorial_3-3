@@ -72,17 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
       children: [
         Row(
           children: [
-            InkWell(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return StudentDetails();
-                }));
-              },
-              child: Image.asset(
-                "assets/ic_person_add.png",
-                fit: BoxFit.cover,
-              ),
-            ),
+
             Expanded(
               child: TextField(
                 decoration: InputDecoration(
@@ -129,19 +119,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisSpacing: 10.0,
                 padding: EdgeInsets.all(4.0),
                 children: <Widget>[
-                 /* Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/ic_main_attendance_records.png",
-                        fit: BoxFit.cover,
-                      ),
-                      Text(
-                        'Attendance records',
-                        style: TextStyle(color: Colors.black),
-                      )
-                    ],
-                  ),*/
+                  InkWell(
+                    child:Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/ic_person_add.png",
+                          fit: BoxFit.cover,
+                          width: 80,
+                        ),
+                        Text(
+                          'Add student',
+                          style: TextStyle(color: Colors.black),
+                        )
+                      ],
+                    ) ,
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return StudentDetails();
+                      }));
+                    },
+                  ),
                  InkWell(
                    child: Column(
                      mainAxisAlignment: MainAxisAlignment.center,
@@ -149,6 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
                        Image.asset(
                          "assets/tutorial_work_foreground.png",
                          fit: BoxFit.cover,
+                         width: 150,
                        ),
                        Text(
                          'Marking',
@@ -170,6 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Image.asset(
                           "assets/student_score_foreground.png",
                           fit: BoxFit.cover,
+                          width: 150,
                         ),
                         Text(
                           'Student score',
@@ -191,6 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Image.asset(
                           "assets/student_list_foreground.png",
                           fit: BoxFit.cover,
+                          width: 150,
                         ),
                         Text(
                           'Student list ',

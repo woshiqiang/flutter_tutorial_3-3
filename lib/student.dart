@@ -82,7 +82,7 @@ class StudentModel extends ChangeNotifier {
     await studentsCollection.doc(id).set(item.toJson());
 
     //refresh the db
-    await fetch();
+//    await fetch();
   }
 
   void delete(String id) async {
