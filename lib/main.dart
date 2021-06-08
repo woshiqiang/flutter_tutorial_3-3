@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/marking_page.dart';
 import 'package:flutter_tutorial_3/score_page.dart';
@@ -9,7 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-void main() {
+
+
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
@@ -99,6 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Fluttertoast.showToast(msg: 'Not find');
                       return;
                     }
+                    searchController.text = "";
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return StudentInfo(student: student,);

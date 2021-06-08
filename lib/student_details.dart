@@ -97,7 +97,7 @@ class _StudentDetailsState extends State<StudentDetails> {
                                 Provider.of<StudentModel>(context, listen:false).update(student.id, student);
 
                               //return to previous screen
-                              Navigator.pop(context);
+                              Navigator.pop(context,1);
                             }
                           }, icon: Icon(Icons.save), label: Text("Save Values"))
                         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/student.dart';
 import 'package:flutter_tutorial_3/student_details.dart';
+import 'package:flutter_tutorial_3/student_info.dart';
 import 'package:flutter_tutorial_3/tutorial.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -54,7 +55,9 @@ class _StudentListPageState extends State<StudentListPage> {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) {
                 return StudentDetails();
-              }));
+              })).then((value){
+                studentModel.fetch();
+          });
         },
       ),
       body: Center(
@@ -77,10 +80,20 @@ class _StudentListPageState extends State<StudentListPage> {
                           ),
                           leading: null,
                           onTap: () {
+//                            Navigator.push(context,
+//                                MaterialPageRoute(builder: (context) {
+//                                  return StudentDetails(student: student);
+//                                }));
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                                  return StudentDetails(student: student);
-                                }));
+                                  return StudentInfo(student: student,);
+                                })).then((value){
+                                  setState(() {
+                                    if(value == 1){
+                                      studentModel.delete(student.id);
+                                    }
+                                  });
+                            });
                           },
                         ),
                         background: Container(
@@ -90,7 +103,7 @@ class _StudentListPageState extends State<StudentListPage> {
                         onDismissed: (direction) {
                           setState(() {
                             studentModel.delete(student.id);
-                            TutorialModel().delete(student.id);
+//                            TutorialModel().delete(student.id);
                           });
                         },
                       );
