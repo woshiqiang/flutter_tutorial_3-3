@@ -41,6 +41,24 @@ class _MarkingPageState extends State<MarkingPage> {
   List checkList = [];
 
   @override
+  void initState() {
+    var future = stateCollection.doc(widget.week).get();
+    future.then((value) {
+      var data = value.data();
+      if (data == null) {
+        return;
+      }
+      if (data.containsKey('scheme')) {
+        print(data['scheme']);
+        setState(() {
+          widget.mode = data['scheme'];
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => StudentModel(),
@@ -82,11 +100,28 @@ class _MarkingPageState extends State<MarkingPage> {
                     );
                   }).toList(),
                   onChanged: (_) {
+
                     setState(() {
                       widget.week = _;
                       widget.weekIndex =
                           int.parse(_.substring(4, _.length)) - 1;
                     });
+
+                    var future = stateCollection.doc(widget.week).get();
+                    future.then((value) {
+                      var data = value.data();
+                      if (data == null) {
+                        return;
+                      }
+                      if (data.containsKey('scheme')) {
+                        print(data['scheme']);
+                        setState(() {
+                          widget.mode = data['scheme'];
+                        });
+                      }
+                    });
+
+
                   },
                   value: widget.week,
                 ),
@@ -163,8 +198,8 @@ class _MarkingPageState extends State<MarkingPage> {
                             break;
                         }
                         model.update(s.id, s);
-                        model.fetch();
                       });
+                      model.fetch();
                       Fluttertoast.showToast(msg: 'Success!');
                     },
                     child: Text('RESET')),
@@ -218,67 +253,10 @@ class _MarkingPageState extends State<MarkingPage> {
                                   _score(0, item, model);
                                   break;
                                 case 'HD/DN/CR/PP/NN':
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return SimpleDialog(
-                                        title: Text('HD/DN/CR/PP/NN'),
-                                        children: HDLevel.map((e) {
-                                          return Row(
-                                            children: [
-                                              Radio(
-                                                value: e.toString(),
-                                                // 改变事件
-                                                onChanged: (value) {},
-                                                // 按钮组的值
-                                                groupValue: true,
-                                              ),
-                                              Text(e.toString()),
-                                            ],
-                                          );
-                                        }).toList(),
-                                      );
-                                    },
-                                  );
+                                  _HQ(0, item, model,0);
                                   break;
                                 case 'A/B/C/D/F':
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text('A/B/C/D/F'),
-                                          content: Column(
-                                            children: ABCLevel.map((e) {
-                                              return Row(
-                                                children: [
-                                                  Radio(
-                                                    value: e.toString(),
-                                                    // 改变事件
-                                                    onChanged: (value) {},
-                                                    // 按钮组的值
-                                                    groupValue: true,
-                                                  ),
-                                                  Text(e.toString()),
-                                                ],
-                                              );
-                                            }).toList(),
-                                          ),
-                                          actions: [
-                                            FlatButton(
-                                              child: Text('取消'),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            FlatButton(
-                                              child: Text('确认'),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      });
+                                  _HQ(0, item, model,1);
                                   break;
                               }
                             },
@@ -294,68 +272,10 @@ class _MarkingPageState extends State<MarkingPage> {
                                   _score(1, item, model);
                                   break;
                                 case 'HD/DN/CR/PP/NN':
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return SimpleDialog(
-                                        title: Text('HD/DN/CR/PP/NN'),
-                                        children: HDLevel.map((e) {
-                                          return Row(
-                                            children: [
-                                              Radio(
-                                                value: e.toString(),
-                                                // 改变事件
-                                                onChanged: (value) {},
-                                                // 按钮组的值
-                                                groupValue: true,
-                                              ),
-                                              Text(e.toString()),
-                                            ],
-                                          );
-                                        }).toList(),
-                                      );
-                                    },
-                                  );
+                                  _HQ(1, item, model,0);
                                   break;
                                 case 'A/B/C/D/F':
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text('A/B/C/D/F'),
-                                          content: Column(
-                                            children: ABCLevel.map((e) {
-                                              return Row(
-                                                children: [
-                                                  Radio(
-                                                    value: e.toString(),
-                                                    // 改变事件
-                                                    onChanged: (value) {},
-                                                    // 按钮组的值
-                                                    groupValue: true,
-                                                  ),
-                                                  Text(e.toString()),
-                                                ],
-                                              );
-                                            }).toList(),
-                                          ),
-                                          actions: [
-                                            FlatButton(
-                                              child: Text('取消'),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            FlatButton(
-                                              child: Text('确认'),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      });
-                                  break;
+                                  _HQ(1, item, model,1);
                               }
                             },
                             child: Text('SS')),
@@ -438,13 +358,13 @@ class _MarkingPageState extends State<MarkingPage> {
         });
   }
 
-  void _score(int type,Student item,StudentModel model){
+  void _score(int type, Student item, StudentModel model) {
     int score = 0;
-    if(type == 0){
+    if (type == 0) {
       if (item.qm.containsKey(widget.week)) {
         score = item.qm[widget.week].toInt();
       }
-    }else{
+    } else {
       if (item.sm.containsKey(widget.week)) {
         score = item.sm[widget.week].toInt();
       }
@@ -475,12 +395,14 @@ class _MarkingPageState extends State<MarkingPage> {
                 onPressed: () {
                   Navigator.of(context).pop('Accept');
 
-                  if(type == 0){
+                  if (type == 0) {
                     item.qm[widget.week] = int.parse(scoreController.text);
-                    item.score[widget.weekIndex] = int.parse(scoreController.text);
-                  }else{
+                    item.score[widget.weekIndex] =
+                        int.parse(scoreController.text);
+                  } else {
                     item.sm[widget.week] = int.parse(scoreController.text);
-                    item.scoreQ[widget.weekIndex] = int.parse(scoreController.text);
+                    item.scoreQ[widget.weekIndex] =
+                        int.parse(scoreController.text);
                   }
 
                   model.update(item.id, item);
@@ -493,6 +415,62 @@ class _MarkingPageState extends State<MarkingPage> {
         });
   }
 
+  void _HQ(int type, Student item, StudentModel model,int scheme) {
+    int num = 0;
+    if (type == 0) {
+      if (item.qm.containsKey(widget.week)) {
+        num = item.qm[widget.week].toInt();
+      }
+    } else {
+      if (item.sm.containsKey(widget.week)) {
+        num = item.sm[widget.week].toInt();
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        var hd = HDDialog(
+          numTemp: num,scheme:scheme
+        );
+        return CupertinoAlertDialog(
+          title: Text('HD Level'),
+          content: Material(
+            color: Colors.white10,
+            child: hd,
+          ),
+          actions: <Widget>[
+            new CupertinoDialogAction(
+              isDestructiveAction: true,
+              onPressed: () {
+                Navigator.of(context).pop('Cancel');
+              },
+              child: new Text('Cancel'),
+            ),
+            new CupertinoDialogAction(
+              isDestructiveAction: true,
+              onPressed: () {
+                Navigator.of(context).pop('Accept');
+                Fluttertoast.showToast(msg: '${hd.numTemp}');
+
+                if (type == 0) {
+                  item.qm[widget.week] = hd.numTemp;
+                  item.score[widget.weekIndex] = 100 - num * 10;
+                } else {
+                  item.sm[widget.week] = hd.numTemp;
+                  item.scoreQ[widget.weekIndex] = 100 - num * 10;
+                }
+
+                model.update(item.id, item);
+                model.fetch();
+              },
+              child: new Text('Sure'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 }
 
@@ -520,6 +498,41 @@ class _MulDialogState extends State<MulDialog> {
                   });
                 }),
             Text(MultipleC[index]),
+          ],
+        );
+      }).toList(),
+    );
+  }
+}
+
+class HDDialog extends StatefulWidget {
+  int numTemp;
+  int scheme;
+
+  HDDialog({Key key, this.numTemp, this.scheme}) : super(key: key);
+
+  @override
+  _HDDialogState createState() => _HDDialogState();
+}
+
+class _HDDialogState extends State<HDDialog> {
+  @override
+  Widget build(BuildContext context) {
+    Map map = widget.scheme == 0 ? HDLevel.asMap() : ABCLevel.asMap();
+    return Column(
+      children: map.keys.map((index) {
+        return Row(
+          children: [
+            Radio(
+              value: index == widget.numTemp,
+              onChanged: (value) {
+                setState(() {
+                  widget.numTemp = index;
+                });
+              },
+              groupValue: true,
+            ),
+            Text(widget.scheme == 0 ? HDLevel[index] : ABCLevel[index]),
           ],
         );
       }).toList(),
