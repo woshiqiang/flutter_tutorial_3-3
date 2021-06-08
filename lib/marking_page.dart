@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/student.dart';
 import 'package:flutter_tutorial_3/student_details.dart';
@@ -8,7 +9,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'state.dart';
 
 List scheme = ["week1", "week3", "week5", "week8", "week10"];
 List schemeWeekId = [0, 2, 4, 7, 9];
@@ -34,6 +34,8 @@ class MarkingPage extends StatefulWidget {
 
 class _MarkingPageState extends State<MarkingPage> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  CollectionReference stateCollection =
+      FirebaseFirestore.instance.collection('state2');
 
   @override
   Widget build(BuildContext context) {
@@ -107,16 +109,32 @@ class _MarkingPageState extends State<MarkingPage> {
                   },
                   value: widget.mode,
                 ),
-                ElevatedButton(onPressed: () {}, child: Text('SET')),
+                ElevatedButton(
+                    onPressed: () {
+                      var future = stateCollection.doc(widget.week).get();
+                      future.then((value) {
+                        var data = value.data();
+                        if (data == null) {
+                          Fluttertoast.showToast(msg: "请先设置打分模式");
+                          return;
+                        }
+                        if (data.containsKey('scheme')) {
+                          print(data['scheme']);
+                          setState(() {
+                            widget.mode = data['scheme'];
+                          });
+                        }
+                      });
+                    },
+                    child: Text('SET')),
                 SizedBox(
                   width: 3,
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      var info =
-                          StateInfo(week: widget.week, mode: widget.mode);
-                      StateModel().add(info);
-//                      StateModel().get(widget.week);
+                      stateCollection
+                          .doc(widget.week)
+                          .set({'scheme': widget.mode});
                       model.items.forEach((s) {
                         s.score[widget.weekIndex] = 0;
                         switch (widget.mode) {
@@ -177,7 +195,6 @@ class _MarkingPageState extends State<MarkingPage> {
                             child: Checkbox(
                               value: b,
                               onChanged: (bool b) {
-                                print('sssssss');
                                 if (b) {
                                   item.records.add(widget.week);
                                 } else {
