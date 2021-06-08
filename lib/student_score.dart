@@ -39,6 +39,7 @@ class _StudentScorePageState extends State<StudentScorePage> {
                     var week = 'week$i';
                     var item = widget.student;
                     var score = item.score;
+                    var scoreQ = item.scoreQ;
                     var records = item.records;
                     var a = records.contains(week) ? '100' : '0';
                     return Row(
@@ -47,8 +48,8 @@ class _StudentScorePageState extends State<StudentScorePage> {
                         SizedBox(width: 5),
                         Expanded(flex: 1, child: Text(week)),
                         Expanded(flex: 1, child: Text(a)),
-                        Expanded(flex: 1, child: Text('0')),
-                        Expanded(flex: 1, child: Text('0')),
+                        Expanded(flex: 1, child: Text(score[index]?.toString())),
+                        Expanded(flex: 1, child: Text(scoreQ[index]?.toString())),
                       ],
                     );
                   },
