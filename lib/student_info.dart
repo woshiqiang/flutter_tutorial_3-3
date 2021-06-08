@@ -1,15 +1,15 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/student.dart';
 import 'package:flutter_tutorial_3/student_score.dart';
 
-
 class StudentInfo extends StatefulWidget {
   final Student student;
-
 
   const StudentInfo({
     Key key,
@@ -22,6 +22,27 @@ class StudentInfo extends StatefulWidget {
 
 class _StudentInfoState extends State<StudentInfo> {
   File file;
+  String downLoadUrl;
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    try{
+      getImage();
+    }catch(e){
+    }
+  }
+
+  Future<Void> getImage() async {
+    var url = await FirebaseStorage.instance
+        .ref('uploads/' + widget.student.id + '.jpeg')
+        .getDownloadURL();
+    setState(() {
+      downLoadUrl = url;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +61,20 @@ class _StudentInfoState extends State<StudentInfo> {
               ),
             ),
             InkWell(
-              child: file == null
-                  ? Image.asset(
-                      "assets/avatar_foreground.png",
-                      fit: BoxFit.cover,
+              child: downLoadUrl != null
+                  ? Image.network(
+                      downLoadUrl,
+                      height: 120,
                     )
-                  : Image.file(file,height: 120,),
+                  : (file != null
+                      ? Image.file(
+                          file,
+                          height: 120,
+                        )
+                      : Image.asset(
+                          "assets/avatar_foreground.png",
+                          fit: BoxFit.cover,
+                        )),
               onTap: () {
                 showDialog<Null>(
                   context: context,
@@ -145,7 +174,7 @@ class _StudentInfoState extends State<StudentInfo> {
                   child: Text('remove'),
                   onPressed: () {
 //                    StudentModel().delete(widget.student.id);
-                    Navigator.pop(context,1);
+                    Navigator.pop(context, 1);
                   },
                 ),
               ],
@@ -169,11 +198,22 @@ class _StudentInfoState extends State<StudentInfo> {
         MaterialPageRoute(
             builder: (context) => TakePictureScreen(
                 // Pass the appropriate camera to the TakePictureScreen widget.
-                camera: firstCamera))).then((value) {
-                  setState(() {
-                    file = value;
-                  });
+                camera: firstCamera)));
+    setState(() {
+      file = picture;
     });
+    //now do the upload
+    try {
+      await FirebaseStorage.instance
+          .ref('uploads/' + widget.student.id + '.jpeg')
+          .putFile(file);
+      var downLoadUrl = await FirebaseStorage.instance
+          .ref('uploads/' + widget.student.id + '.jpeg')
+          .getDownloadURL();
+      print(downLoadUrl);
+    } on FirebaseException catch (e) {
+      // e.g, e.code == 'canceled'
+    }
   }
 }
 
@@ -257,7 +297,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
             Navigator.pop(context, picture);
             return;
-
           } catch (e) {
             // If an error occurs, log the error to the console.
             print(e);
