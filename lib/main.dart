@@ -130,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Image.asset(
                           "assets/ic_person_add.png",
                           fit: BoxFit.cover,
-                          width: 80,
+                          width: 150,
                         ),
                         Text(
                           'Add student',
