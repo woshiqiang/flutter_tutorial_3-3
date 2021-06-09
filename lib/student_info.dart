@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/student.dart';
 import 'package:flutter_tutorial_3/student_score.dart';
+import 'package:image_picker/image_picker.dart';
 
 class StudentInfo extends StatefulWidget {
   final Student student;
@@ -95,8 +96,31 @@ class _StudentInfoState extends State<StudentInfo> {
                           child: ElevatedButton(
                             child: Text('GALLERY'),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             Navigator.of(context).pop();
+                            final picker = ImagePicker();
+                            final pickedFile = await picker.getImage(
+                                source: ImageSource.gallery);
+                            if (pickedFile != null) {
+                              setState(() {
+                                file = File(pickedFile.path);
+                              });
+                              //now do the upload
+                              try {
+                                await FirebaseStorage.instance
+                                    .ref('uploads/' + widget.student.id + '.jpeg')
+                                    .putFile(file);
+                                var url = await FirebaseStorage.instance
+                                    .ref('uploads/' + widget.student.id + '.jpeg')
+                                    .getDownloadURL();
+                                setState(() {
+                                  downLoadUrl = url;
+                                });
+                                print(downLoadUrl);
+                              } on FirebaseException catch (e) {
+                                // e.g, e.code == 'canceled'
+                              }
+                            }
                           },
                         ),
                         SimpleDialogOption(
