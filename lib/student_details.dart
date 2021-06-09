@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/student.dart';
 import 'package:flutter_tutorial_3/tutorial.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 /// add or edit student
@@ -84,15 +85,15 @@ class _StudentDetailsState extends State<StudentDetails> {
                               student.email = emailController.text; //good code would validate these
                               student.course = courseController.text; //good code would validate these
 
-                              //TODO: update the model
                               if (adding) {
+                                var bySid = Provider.of<StudentModel>(
+                                    context, listen: false).getBySid(student.sid);
+                                if(bySid != null){
+                                  Fluttertoast.showToast(msg: 'sid already exists!');
+                                  return;
+                                }
                                 Provider.of<StudentModel>(
                                     context, listen: false).add(student);
-//                                var tutorial = Tutorial(id: student.sid,sid: student.sid,name: student.name);
-//                                tutorial.scoreQ = [0,0,0,0,0,0,0,0,0,0,0,0];
-//                                tutorial.score = [0,0,0,0,0,0,0,0,0,0,0,0];
-//                                var tutorialModel = TutorialModel();
-//                                tutorialModel.add(tutorial);
                               }else
                                 Provider.of<StudentModel>(context, listen:false).update(student.id, student);
 

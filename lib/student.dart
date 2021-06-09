@@ -65,6 +65,11 @@ class StudentModel extends ChangeNotifier {
     return items.firstWhere((student) => student.id == id);
   }
 
+  Student getBySid(String sid){
+    if (sid == null) return null;
+    return items.firstWhere((student) => student.sid == sid);
+  }
+
   void add(Student item) async {
     loading = true;
     notifyListeners();
