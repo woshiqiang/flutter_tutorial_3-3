@@ -125,9 +125,6 @@ class _MarkingPageState extends State<MarkingPage> {
                   },
                   value: widget.week,
                 ),
-                SizedBox(
-                  width: 3,
-                ),
                 DropdownButton<String>(
                   items: <String>[
                     'Multiple checkboxes',
@@ -166,43 +163,43 @@ class _MarkingPageState extends State<MarkingPage> {
                     },
                     child: Text('SET')),
                 SizedBox(
-                  width: 3,
+                  width: 2,
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      stateCollection
-                          .doc(widget.week)
-                          .set({'scheme': widget.mode});
-                      model.items.forEach((s) {
-                        s.score[widget.weekIndex] = 0;
-                        switch (widget.mode) {
-                          case 'Multiple checkboxes':
-                            var list = [];
-                            for (int i1 = 0; i1 < MultipleC.length; i1++) {
-                              list.add(false);
-                            }
-                            s.qm[widget.week] = list;
-                            s.sm[widget.week] = list;
-                            break;
-                          case 'Score out of 100':
-                            s.qm[widget.week] = 0;
-                            s.sm[widget.week] = 0;
-                            break;
-                          case 'HD/DN/CR/PP/NN':
-                            s.qm[widget.week] = 5;
-                            s.sm[widget.week] = 5;
-                            break;
-                          case 'A/B/C/D/F':
-                            s.qm[widget.week] = 4;
-                            s.sm[widget.week] = 4;
-                            break;
-                        }
-                        model.update(s.id, s);
-                      });
-                      model.fetch();
-                      Fluttertoast.showToast(msg: 'Success!');
-                    },
-                    child: Text('RESET')),
+               Expanded(child:  ElevatedButton(
+                   onPressed: () {
+                     stateCollection
+                         .doc(widget.week)
+                         .set({'scheme': widget.mode});
+                     model.items.forEach((s) {
+                       s.score[widget.weekIndex] = 0;
+                       switch (widget.mode) {
+                         case 'Multiple checkboxes':
+                           var list = [];
+                           for (int i1 = 0; i1 < MultipleC.length; i1++) {
+                             list.add(false);
+                           }
+                           s.qm[widget.week] = list;
+                           s.sm[widget.week] = list;
+                           break;
+                         case 'Score out of 100':
+                           s.qm[widget.week] = 0;
+                           s.sm[widget.week] = 0;
+                           break;
+                         case 'HD/DN/CR/PP/NN':
+                           s.qm[widget.week] = 5;
+                           s.sm[widget.week] = 5;
+                           break;
+                         case 'A/B/C/D/F':
+                           s.qm[widget.week] = 4;
+                           s.sm[widget.week] = 4;
+                           break;
+                       }
+                       model.update(s.id, s);
+                     });
+                     model.fetch();
+                     Fluttertoast.showToast(msg: 'Success!');
+                   },
+                   child: Text('RESET')),)
               ],
             ),
             Row(
