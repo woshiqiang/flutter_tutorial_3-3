@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/student.dart';
+import 'package:share_plus/share_plus.dart';
 
 class StudentScorePage extends StatefulWidget {
   final Student student;
@@ -85,7 +86,11 @@ class _StudentScorePageState extends State<StudentScorePage> {
             ),
             InkWell(
               onTap: (){
-
+                 var text = "Student grade is: $total  "+
+                    "attendance:${sumAttendance ~/ 12}  "+
+                    "Quzi:${sumScore ~/ 5}  "+
+                    "SelfWork:${sumScoreQ ~/ 5}  ";
+                Share.share(text);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
