@@ -62,12 +62,12 @@ class StudentModel extends ChangeNotifier {
 
   Student get(String id) {
     if (id == null) return null;
-    return items.firstWhere((student) => student.id == id);
+    return items.firstWhere((student) => student.id == id, orElse: () => null);
   }
 
-  Student getBySid(String sid){
+  Student getBySid(String sid) {
     if (sid == null) return null;
-    return items.firstWhere((student) => student.sid == sid);
+    return items.firstWhere((student) => student.sid == sid, orElse: () => null);
   }
 
   void add(Student item) async {
@@ -77,7 +77,7 @@ class StudentModel extends ChangeNotifier {
     await studentsCollection.add(item.toJson());
 
     //refresh the db
-    fetch();
+    await fetch();
   }
 
   void update(String id, Student item) async {
@@ -97,7 +97,7 @@ class StudentModel extends ChangeNotifier {
     await studentsCollection.doc(id).delete();
 
     //refresh the db
-    fetch();
+    await fetch();
   }
 
   Future<Student> search(String key) async {
