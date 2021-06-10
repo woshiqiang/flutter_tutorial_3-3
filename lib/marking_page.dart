@@ -395,7 +395,7 @@ class _MarkingPageState extends State<MarkingPage> {
                       return;
                     }
                     if(scoreNow<0||scoreNow>100){
-                      Fluttertoast.showToast(msg: '请录入0-100的数');
+                      Fluttertoast.showToast(msg: '请录入0-100的整数');
                       return;
                     }
                     item.qm[widget.week] = int.parse(scoreController.text);
