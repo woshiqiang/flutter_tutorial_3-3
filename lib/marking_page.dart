@@ -389,6 +389,15 @@ class _MarkingPageState extends State<MarkingPage> {
                   Navigator.of(context).pop('Accept');
 
                   if (type == 0) {
+                    var scoreNow = int.tryParse(scoreController.text);
+                    if(scoreNow == null){
+                      Fluttertoast.showToast(msg: "录入格式有误");
+                      return;
+                    }
+                    if(scoreNow<0||scoreNow>100){
+                      Fluttertoast.showToast(msg: '请录入0-100的数');
+                      return;
+                    }
                     item.qm[widget.week] = int.parse(scoreController.text);
                     item.score[widget.weekIndex] =
                         int.parse(scoreController.text);
