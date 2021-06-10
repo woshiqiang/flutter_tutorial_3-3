@@ -52,11 +52,11 @@ class _StudentScorePageState extends State<StudentScorePage> {
     list.add({
       "Week": "Total mark",
       "Attendance": "${sumAttendance ~/ 12}",
-      "Quiz": "${sumScore ~/ 5}",
-      "Self work": "${sumScoreQ ~/ 5}"
+      "Quiz": "${sumScore ~/ 12}",
+      "Self work": "${sumScoreQ ~/ 12}"
     });
 
-    int total = (sumAttendance ~/ 12 + sumScore ~/ 5 + sumScoreQ ~/ 5) ~/ 3;
+    int total = (sumAttendance ~/ 12 + sumScore ~/ 12 + sumScoreQ ~/ 12) ~/ 3;
 
     return Scaffold(
       appBar: AppBar(
@@ -88,8 +88,8 @@ class _StudentScorePageState extends State<StudentScorePage> {
               onTap: (){
                  var text = "Student grade is: $total  "+
                     "attendance:${sumAttendance ~/ 12}  "+
-                    "Quzi:${sumScore ~/ 5}  "+
-                    "SelfWork:${sumScoreQ ~/ 5}  ";
+                    "Quzi:${sumScore ~/ 12}  "+
+                    "SelfWork:${sumScoreQ ~/ 12}  ";
                 Share.share(text);
               },
               child: Row(

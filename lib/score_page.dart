@@ -75,7 +75,7 @@ class _ScorePageState extends State<ScorePage> {
       sumScore += score[i];
       sumScoreQ += scoreQ[i];
     }
-    int total = (sumAttendance ~/ 12 + sumScore ~/ 5 + sumScoreQ ~/ 5) ~/ 3;
+    int total = (sumAttendance ~/ 12 + sumScore ~/ 12 + sumScoreQ ~/ 12) ~/ 3;
     return total.toString();
   }
 }
