@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/student.dart';
-import 'package:flutter_tutorial_3/student_details.dart';
-import 'package:flutter_tutorial_3/tutorial.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class ScorePage extends StatefulWidget {
   @override
@@ -11,7 +8,6 @@ class ScorePage extends StatefulWidget {
 }
 
 class _ScorePageState extends State<ScorePage> {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +76,6 @@ class _ScorePageState extends State<ScorePage> {
       sumScoreQ += scoreQ[i];
     }
     int total = (sumAttendance ~/ 12 + sumScore ~/ 5 + sumScoreQ ~/ 5) ~/ 3;
-    return '${total}';
+    return total.toString();
   }
 }

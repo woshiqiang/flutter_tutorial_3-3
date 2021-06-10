@@ -1,20 +1,16 @@
-import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/student.dart';
-import 'package:flutter_tutorial_3/student_details.dart';
-import 'package:flutter_tutorial_3/tutorial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 List scheme = ["week1", "week3", "week5", "week8", "week10"];
 List schemeWeekId = [0, 2, 4, 7, 9];
-List HDLevel = ["HD+", "HD", "DN", "CR", "PP", "NN"];
-List ABCLevel = ["A", "B", "C", "D", "F"];
-List MultipleC = ["CheckPoint 1", "CheckPoint 2", "CheckPoint 3"];
+List hdLevel = ["HD+", "HD", "DN", "CR", "PP", "NN"];
+List abcLevel = ["A", "B", "C", "D", "F"];
+List multipleC = ["CheckPoint 1", "CheckPoint 2", "CheckPoint 3"];
 List schemeSp = [
   "Multiple checkboxes",
   "Score out of 100",
@@ -22,6 +18,7 @@ List schemeSp = [
   "A/B/C/D/F"
 ];
 
+// ignore: must_be_immutable
 class MarkingPage extends StatefulWidget {
   String week = 'week1';
   int weekIndex = 0;
@@ -33,7 +30,6 @@ class MarkingPage extends StatefulWidget {
 }
 
 class _MarkingPageState extends State<MarkingPage> {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   CollectionReference stateCollection =
       FirebaseFirestore.instance.collection('state2');
   final scoreController = TextEditingController();
@@ -175,7 +171,7 @@ class _MarkingPageState extends State<MarkingPage> {
                        switch (widget.mode) {
                          case 'Multiple checkboxes':
                            var list = [];
-                           for (int i1 = 0; i1 < MultipleC.length; i1++) {
+                           for (int i1 = 0; i1 < multipleC.length; i1++) {
                              list.add(false);
                            }
                            s.qm[widget.week] = list;
@@ -250,10 +246,10 @@ class _MarkingPageState extends State<MarkingPage> {
                                   _score(0, item, model);
                                   break;
                                 case 'HD/DN/CR/PP/NN':
-                                  _HQ(0, item, model,0);
+                                  _hq(0, item, model,0);
                                   break;
                                 case 'A/B/C/D/F':
-                                  _HQ(0, item, model,1);
+                                  _hq(0, item, model,1);
                                   break;
                               }
                             },
@@ -269,10 +265,10 @@ class _MarkingPageState extends State<MarkingPage> {
                                   _score(1, item, model);
                                   break;
                                 case 'HD/DN/CR/PP/NN':
-                                  _HQ(1, item, model,0);
+                                  _hq(1, item, model,0);
                                   break;
                                 case 'A/B/C/D/F':
-                                  _HQ(1, item, model,1);
+                                  _hq(1, item, model,1);
                               }
                             },
                             child: Text('SS')),
@@ -294,7 +290,7 @@ class _MarkingPageState extends State<MarkingPage> {
       if (item.qm.containsKey(widget.week)) {
         checkList.addAll(item.qm[widget.week]);
       } else {
-        for (int i = 0; i < MultipleC.length; i++) {
+        for (int i = 0; i < multipleC.length; i++) {
           checkList.add(false);
         }
       }
@@ -302,7 +298,7 @@ class _MarkingPageState extends State<MarkingPage> {
       if (item.sm.containsKey(widget.week)) {
         checkList.addAll(item.sm[widget.week]);
       } else {
-        for (int i = 0; i < MultipleC.length; i++) {
+        for (int i = 0; i < multipleC.length; i++) {
           checkList.add(false);
         }
       }
@@ -340,10 +336,10 @@ class _MarkingPageState extends State<MarkingPage> {
                   }
                   if (type == 0) {
                     item.qm[widget.week] = checkList;
-                    item.score[widget.weekIndex] = s * 100 ~/ MultipleC.length;
+                    item.score[widget.weekIndex] = s * 100 ~/ multipleC.length;
                   } else {
                     item.sm[widget.week] = checkList;
-                    item.scoreQ[widget.weekIndex] = s * 100 ~/ MultipleC.length;
+                    item.scoreQ[widget.weekIndex] = s * 100 ~/ multipleC.length;
                   }
                   model.update(item.id, item);
                   model.fetch();
@@ -412,7 +408,7 @@ class _MarkingPageState extends State<MarkingPage> {
         });
   }
 
-  void _HQ(int type, Student item, StudentModel model,int scheme) {
+  void _hq(int type, Student item, StudentModel model,int scheme) {
     int num = 0;
     if (type == 0) {
       if (item.qm.containsKey(widget.week)) {
@@ -484,7 +480,7 @@ class _MulDialogState extends State<MulDialog> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: MultipleC.asMap().keys.map((index) {
+      children: multipleC.asMap().keys.map((index) {
         return Row(
           children: [
             Checkbox(
@@ -494,7 +490,7 @@ class _MulDialogState extends State<MulDialog> {
                     widget.checkList[index] = b;
                   });
                 }),
-            Text(MultipleC[index]),
+            Text(multipleC[index]),
           ],
         );
       }).toList(),
@@ -502,6 +498,7 @@ class _MulDialogState extends State<MulDialog> {
   }
 }
 
+// ignore: must_be_immutable
 class HDDialog extends StatefulWidget {
   int numTemp;
   int scheme;
@@ -515,7 +512,7 @@ class HDDialog extends StatefulWidget {
 class _HDDialogState extends State<HDDialog> {
   @override
   Widget build(BuildContext context) {
-    Map map = widget.scheme == 0 ? HDLevel.asMap() : ABCLevel.asMap();
+    Map map = widget.scheme == 0 ? hdLevel.asMap() : abcLevel.asMap();
     return Column(
       children: map.keys.map((index) {
         return Row(
@@ -529,7 +526,7 @@ class _HDDialogState extends State<HDDialog> {
               },
               groupValue: true,
             ),
-            Text(widget.scheme == 0 ? HDLevel[index] : ABCLevel[index]),
+            Text(widget.scheme == 0 ? hdLevel[index] : abcLevel[index]),
           ],
         );
       }).toList(),

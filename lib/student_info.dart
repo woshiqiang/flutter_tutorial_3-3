@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -36,7 +35,7 @@ class _StudentInfoState extends State<StudentInfo> {
     }
   }
 
-  Future<Void> getImage() async {
+  void getImage() async {
     var url = await FirebaseStorage.instance
         .ref('uploads/' + widget.student.id + '.jpeg')
         .getDownloadURL();
@@ -85,51 +84,51 @@ class _StudentInfoState extends State<StudentInfo> {
                       children: <Widget>[
                         SimpleDialogOption(
                           child: ElevatedButton(
+                            onPressed: () async  {
+                              Navigator.of(context).pop();
+                              androidIOSUpload();
+                            },
                             child: Text('TAKE PICTURE'),
                           ),
-                          onPressed: () async {
-                            Navigator.of(context).pop();
-                            await androidIOSUpload();
-                          },
                         ),
                         SimpleDialogOption(
                           child: ElevatedButton(
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                              final picker = ImagePicker();
+                              final pickedFile = await picker.getImage(
+                                  source: ImageSource.gallery);
+                              if (pickedFile != null) {
+                                setState(() {
+                                  file = File(pickedFile.path);
+                                });
+                                //now do the upload
+                                try {
+                                  await FirebaseStorage.instance
+                                      .ref('uploads/' + widget.student.id + '.jpeg')
+                                      .putFile(file);
+                                  var url = await FirebaseStorage.instance
+                                      .ref('uploads/' + widget.student.id + '.jpeg')
+                                      .getDownloadURL();
+                                  setState(() {
+                                    downLoadUrl = url;
+                                  });
+                                  print(downLoadUrl);
+                                } on FirebaseException {
+                                  // e.g, e.code == 'canceled'
+                                }
+                              }
+                            },
                             child: Text('GALLERY'),
                           ),
-                          onPressed: () async {
-                            Navigator.of(context).pop();
-                            final picker = ImagePicker();
-                            final pickedFile = await picker.getImage(
-                                source: ImageSource.gallery);
-                            if (pickedFile != null) {
-                              setState(() {
-                                file = File(pickedFile.path);
-                              });
-                              //now do the upload
-                              try {
-                                await FirebaseStorage.instance
-                                    .ref('uploads/' + widget.student.id + '.jpeg')
-                                    .putFile(file);
-                                var url = await FirebaseStorage.instance
-                                    .ref('uploads/' + widget.student.id + '.jpeg')
-                                    .getDownloadURL();
-                                setState(() {
-                                  downLoadUrl = url;
-                                });
-                                print(downLoadUrl);
-                              } on FirebaseException catch (e) {
-                                // e.g, e.code == 'canceled'
-                              }
-                            }
-                          },
                         ),
                         SimpleDialogOption(
                           child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
                             child: Text('CANCEL'),
                           ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
                         ),
                       ],
                     );
@@ -235,7 +234,7 @@ class _StudentInfoState extends State<StudentInfo> {
           .ref('uploads/' + widget.student.id + '.jpeg')
           .getDownloadURL();
       print(downLoadUrl);
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       // e.g, e.code == 'canceled'
     }
   }

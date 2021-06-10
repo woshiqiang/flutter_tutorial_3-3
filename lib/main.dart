@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_3/marking_page.dart';
 import 'package:flutter_tutorial_3/score_page.dart';

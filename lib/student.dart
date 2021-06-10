@@ -77,7 +77,7 @@ class StudentModel extends ChangeNotifier {
     await studentsCollection.add(item.toJson());
 
     //refresh the db
-    await fetch();
+    fetch();
   }
 
   void update(String id, Student item) async {
@@ -97,7 +97,7 @@ class StudentModel extends ChangeNotifier {
     await studentsCollection.doc(id).delete();
 
     //refresh the db
-    await fetch();
+    fetch();
   }
 
   Future<Student> search(String key) async {
